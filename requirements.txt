@@ -8,9 +8,9 @@ Jinja2==3.1.2
 MarkupSafe==2.1.1
 Werkzeug==2.1.2
 zipp==3.8.0
-imageio==2.8.0
+imageio==2.16.1
 matplotlib==3.2.1
-numpy==1.18.2
+numpy==1.22.3
 opencv-python==4.5.5.64
-scikit-image==0.16.2
-scipy==1.2.2
+scikit-image==0.19.2
+scipy==1.8.0
