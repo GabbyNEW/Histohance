@@ -1,7 +1,8 @@
-from flask import Flask
+# heroku logs -a just-a-temp-flask --tail
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods = ['POST', 'GET', 'PUT'])
 def index():
-    return "Hello World!"
+    return render_template('root.html')
