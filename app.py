@@ -14,6 +14,10 @@ app.secret_key = 'super secret key'
 
 @app.route("/", methods = ['POST', 'GET', 'PUT'])
 def index():
+    return render_template('index.html')
+
+@app.route("/he", methods = ['POST', 'GET', 'PUT'])
+def he_web():
     if 'input_image' in session : 
         input_image = session['input_image']
         output_image = session['output_image']
@@ -21,9 +25,9 @@ def index():
         input_image = None
         output_image = None
     session.clear()
-    return render_template('root.html', input_image=input_image, output_image=output_image)
+    return render_template('he.html', input_image=input_image, output_image=output_image)
 
-@app.route("/upload_test", methods = ['POST'])
+@app.route("/he_upload", methods = ['POST'])
 def he_upload():
     image = request.files["file"]
     image.filename = "input.jpg"
@@ -31,7 +35,7 @@ def he_upload():
     perform_he(input_image=image.filename)
     session['input_image'] = image.filename
     session['output_image'] = "output_he.jpeg"
-    return redirect(url_for('.index'))
+    return redirect(url_for('.he_web'))
 
 @app.route('/uploads/<filename>')
 def send_image_file(filename=''):
