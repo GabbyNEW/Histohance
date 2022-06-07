@@ -2,10 +2,31 @@
   <head>
     <title>Div Align Attribbute</title>
   </head>
+
   <body>
+
     <div>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-      labore et dolore magna aliqua.
+      <p>Upload shit or whatever image here...</p>
+      <form action="/upload_test" method= "POST" enctype="multipart/form-data">
+        <input type = "file" name = "file" />
+        <input type = "submit"/>
+      </form>
     </div>
+
+    {% if output_image %}
+    <div>
+      <h2>Input Image:</h2>
+      <img src="{{ url_for('send_image_file', filename=input_image) }}" alt="Input Image">
+    </div>
+    {% endif %}
+
+    {% if input_image %}
+    <div>
+      <h2>Output Image:</h2>
+      <img src="{{ url_for('send_image_file', filename=output_image) }}" alt="Output Image">
+    </div>
+    {% endif %}
+    
   </body>
+
 </html>

@@ -18,11 +18,12 @@ def he_algorithm(img):
 
 def he(filename):
     img_name = filename
-    print(img_name)
-    img = imageio.imread(img_name)
+    img = imageio.imread(uri=img_name)
     result = he_algorithm(img)
-    plt.imshow(result)
-    plt.show()
+    # returns the np.array of the output image
+    return result
+    # plt.imshow(result)
+    # plt.show()
 
 def main():
     img_name = sys.argv[1]
