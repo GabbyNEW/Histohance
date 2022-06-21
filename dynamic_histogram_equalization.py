@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors
 import imageio
 import scipy, scipy.misc, scipy.signal
-import cv2
+# import cv2
 import sys
 
 def build_is_hist(img):
