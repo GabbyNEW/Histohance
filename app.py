@@ -76,4 +76,4 @@ def perform_dhe(input_image):
     result = dhe("uploads/"+input_image)
     # convert np.array to .PNG image and save it
     im = Image.fromarray(result)
-    im.save('uploads/output_he.jpeg')
+    im.save('uploads/output_dhe.jpeg')
