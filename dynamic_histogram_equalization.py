@@ -72,8 +72,8 @@ def build_is_hist(img):
 
     return Hist_I, Hist_S
 
-def dhe(img, alpha=0.5):
-    
+def dhe_algorithm(img):
+    alpha = 0.5
     hist_i, hist_s = build_is_hist(img)
     hist_c = alpha*hist_s + (1-alpha)*hist_i
     hist_sum = np.sum(hist_c)
@@ -98,6 +98,15 @@ def dhe(img, alpha=0.5):
     result[result<0] = 0
     return result.astype(np.uint8)
 
+def dhe(filename):
+    img_name = filename
+    img = imageio.imread(uri=img_name)
+    result = dhe_algorithm(img)
+    # returns the np.array of the output image
+    return result
+    # plt.imshow(result)
+    # plt.show()
+
 def main():
     img_name = sys.argv[1]
     img = imageio.imread(img_name)
@@ -106,4 +115,4 @@ def main():
     plt.show()
 
 if __name__ == '__main__':
-    main()
+    dhe("input.jpg")
