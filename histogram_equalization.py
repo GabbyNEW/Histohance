@@ -5,6 +5,7 @@ import imageio
 import sys
 
 def he_algorithm(img):
+    # Histogram Equalization
     if(len(img.shape)==2):      #gray
         outImg = ex.equalize_hist(img[:,:])*255 
     elif(len(img.shape)==3):    #RGB
@@ -14,6 +15,7 @@ def he_algorithm(img):
 
     outImg[outImg>255] = 255
     outImg[outImg<0] = 0
+    # Return the output image
     return outImg.astype(np.uint8)
 
 def he(filename):

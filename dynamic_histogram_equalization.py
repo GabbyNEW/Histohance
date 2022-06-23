@@ -74,16 +74,20 @@ def build_is_hist(img):
 
 def dhe_algorithm(img):
     alpha = 0.5
+    # Build histogram partition
     hist_i, hist_s = build_is_hist(img)
     hist_c = alpha*hist_s + (1-alpha)*hist_i
+    # Accumulate summation of histogram values
     hist_sum = np.sum(hist_c)
     hist_cum = hist_c.cumsum(axis=0)
     
+    # Image colorspace conversion
     hsv = matplotlib.colors.rgb_to_hsv(img)
     h = hsv[:,:,0]
     s = hsv[:,:,1]
     i = hsv[:,:,2].astype(np.uint8)
     
+    # Apply equalization to each sub-regions of the partitioned histogram
     c = hist_cum / hist_sum
     s_r = (c * 255)
     i_s = np.zeros(i.shape)
@@ -93,6 +97,7 @@ def dhe_algorithm(img):
     hsi_o = np.stack((h,s,i_s), axis=2)
     result = matplotlib.colors.hsv_to_rgb(hsi_o)
     
+    # Return the results
     result = result * 255
     result[result>255] = 255
     result[result<0] = 0
