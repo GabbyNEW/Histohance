@@ -6,13 +6,16 @@ import scipy, scipy.misc, scipy.signal
 # import cv2
 import sys
 
+# Partitioning of histogram
 def build_is_hist(img):
+    # Extracts the image dimension and channels
     hei = img.shape[0]
     wid = img.shape[1]
     ch = img.shape[2]
     Img = np.zeros((hei+4, wid+4, ch))
     for i in range(ch):
         Img[:,:,i] = np.pad(img[:,:,i], (2,2), 'edge')
+    # Image colorspace conversion
     hsv = (matplotlib.colors.rgb_to_hsv(Img))
     hsv[:,:,0] = hsv[:,:,0] * 255
     hsv[:,:,1] = hsv[:,:,1] * 255
@@ -25,7 +28,7 @@ def build_is_hist(img):
     H = hsv[:,:,0]
     S = hsv[:,:,1]
     I = hsv[:,:,2]
-
+    # Applying convolution of 2D arrays
     dIh = scipy.signal.convolve2d(I, np.rot90(fh, 2), mode='same')
     dIv = scipy.signal.convolve2d(I, np.rot90(fv, 2), mode='same')
     dIh[dIh==0] = 0.00001
@@ -48,6 +51,7 @@ def build_is_hist(img):
     Imean = scipy.signal.convolve2d(I,np.ones((5,5))/25, mode='same')
     Smean = scipy.signal.convolve2d(S,np.ones((5,5))/25, mode='same')
     
+    # Grey level allocations
     Rho = np.zeros((hei+4,wid+4))
     for p in range(2,hei+2):
         for q in range(2,wid+2):
@@ -69,7 +73,7 @@ def build_is_hist(img):
         temp = np.zeros(di.shape)
         temp[i==n] = rd[i==n]
         Hist_S[n+1] = np.sum(temp.flatten('F'))
-
+    # Return the partitioned histogram
     return Hist_I, Hist_S
 
 def dhe_algorithm(img):
