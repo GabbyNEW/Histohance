@@ -1,14 +1,14 @@
 <html>
   <head>
     <title>Dynamic Histogram Equalization</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   </head>
 
   <body>
 
     <div>
       <p>Upload image here...</p>
-      <form id="dhe_form" onsubmit="return false;" method= "POST" enctype="multipart/form-data">
+      <form id="dhe_form" method= "POST" enctype="multipart/form-data">
         <input id="file" type = "file" name = "file" />
         <input type = "submit"/>
       </form>
@@ -29,22 +29,21 @@
     {% endif %}
     
     
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $("#dhe_form").submit(function (){
-        var data = new FormData();
-        jQuery.each(jQuery('#file')[0].files, function(i, file) {
-          data.append('file-'+i, file);
-        });
+        var formData = new FormData(this);
+        // jQuery.each(jQuery('#file')[0].files, function(i, file) {
+        //   data.append('file-'+i, file);
+        // });
         $.ajax({
           url: '/dhe_upload',
-          data: data.value,
+          data: formData,
           cache: false,
           contentType: false,
           processData: false,
           method: 'POST',
           type: 'POST',
-          success:function(data){
+          success:function(formData){
             alert('success');
           }
         })
