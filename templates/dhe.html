@@ -8,7 +8,7 @@
 
     <div>
       <p>Upload image here...</p>
-      <form id="dhe_form" method= "POST" enctype="multipart/form-data">
+      <form id="dhe_form" onsubmit="return false;" method= "POST" enctype="multipart/form-data">
         <input id="file" type = "file" name = "file" />
         <input type = "submit"/>
       </form>
@@ -44,7 +44,7 @@
           method: 'POST',
           type: 'POST',
           success:function(formData){
-            alert('success');
+            window.location.href = "/dhe";
           }
         })
       })
