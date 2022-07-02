@@ -54,7 +54,7 @@ def dhe_upload():
     image = request.files["file"]
     image.filename = "input.jpg"
     image.save(os.path.join(app.config["UPLOAD_FOLDER"], image.filename))
-    perform_dhe(input_image=request.files["file"])
+    perform_dhe(input_image=np.array(request.files["file"]))
     session['input_image'] = image.filename
     session['output_image'] = "output_dhe.jpeg"
     return redirect(url_for('.dhe_web'))
