@@ -109,8 +109,8 @@ def dhe_algorithm(img):
 
 def dhe(filename):
     img_name = filename
-    # img = imageio.imread(uri=img_name)
-    result = dhe_algorithm(img = filename)
+    img = imageio.imread(uri=img_name)
+    result = dhe_algorithm(img = img)
     # returns the np.array of the output image
     return result
     # plt.imshow(result)

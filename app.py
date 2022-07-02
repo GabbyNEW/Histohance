@@ -54,7 +54,7 @@ def dhe_upload():
     image = request.files["file"]
     image.filename = "input.jpg"
     image.save(os.path.join(app.config["UPLOAD_FOLDER"], image.filename))
-    perform_dhe(input_image=np.array(request.files["file"]))
+    perform_dhe(input_image=image.filename)
     session['input_image'] = image.filename
     session['output_image'] = "output_dhe.jpeg"
     return redirect(url_for('.dhe_web'))
@@ -73,8 +73,7 @@ def perform_he(input_image):
 
 def perform_dhe(input_image):
     # stores the np.array of the output image
-    # result = dhe("uploads/"+input_image)
-    result = dhe(input_image)
+    result = dhe("uploads/"+input_image)
     # convert np.array to .PNG image and save it
     im = Image.fromarray(result)
     im.save('uploads/output_dhe.jpeg')
