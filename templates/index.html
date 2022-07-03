@@ -1,16 +1,54 @@
 <html>
   <head>
-    <title>Div Align Attribbute</title>
-    <link rel="stylesheet" href="../style.css">
+    <title>Histohance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styles/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../static/js/script.js"></script>
   </head>
-  
   <body>
-    <div class="logo">
-      <img id="logo"></img>
+    <div class="container" id="welcome">
+      <div class="logo">
+        <img id="logo"></img>
+        <p>Enhance your images today!</p>
+      </div>
+      <!--Temporary hyperlinks-->
+      <a class="button" href="/he">Histogram Equalization</a>
+      <a class="button" href="/dhe">Dynamic Histogram Equalization</a>
+      <p style="text-align: center; font-style: italic;">Anything below this text is still work in progress.</p>
     </div>
-    <a href="/he">Histogram Equalization</a>
-    <a href="/dhe">Dynamic Histogram Equalization</a>
-    
+    <div class="container" id="upload">
+
+    </div>
+    <div class="container" id="chooseMethod">
+      <div>
+        <p id="selectMethodText">Select a method below</p>
+      </div>
+      <div class="methodList">
+        <div class="methodOption" id="methodHE">
+          <h1>Histogram Equalization</h1>
+          <ul>
+            <li>Image processing method to adjust the contrast of an image by modifying the histogram of the image.</li>
+            <li>Histograms with large peaks correspond to images with low contrast.</li>
+            <li>Histogram equalization stretches the peak of the image's histogram.</li>
+          </ul>
+        </div>
+        <div class="methodOption" id="methodDHE">
+          <h1>Dynamic Histogram Equalization</h1>
+          <ul>
+            <li>Smart contrast enhancement technique based on conventional histogram equalization.</li>
+            <li>Performs the enhancement of an image while minimizing loss of details.</li>
+            <li>Employs a partitioning operation over the input histogram.</li>
+            <li>May have better overall contrast enhancement compared to normal hisogram equalization.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="container" id="results">
+
+    </div>
   </body>
 
 </html>
