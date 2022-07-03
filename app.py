@@ -51,7 +51,7 @@ def he_upload():
 
 @app.route("/dhe_upload", methods= ['POST'])
 def dhe_upload():
-    size = 640, 640
+    size = 480, 480
     image = request.files["file"]
     im = Image.open(image)
     im.filename = "input.jpg"
