@@ -51,11 +51,16 @@ def he_upload():
 
 @app.route("/dhe_upload", methods= ['POST'])
 def dhe_upload():
+    size = 640, 640
     image = request.files["file"]
-    image.filename = "input.jpg"
-    image.save(os.path.join(app.config["UPLOAD_FOLDER"], image.filename))
-    perform_dhe(input_image=image.filename)
-    session['input_image'] = image.filename
+    im = Image.open(image)
+    im.filename = "input.jpg"
+    im.thumbnail(size, Image.ANTIALIAS)
+    width, height = im.size
+    print("Image resized to " + str(width) + "x" + str(height))
+    im.save(os.path.join(app.config["UPLOAD_FOLDER"], im.filename))
+    perform_dhe(input_image=im.filename)
+    session['input_image'] = im.filename
     session['output_image'] = "output_dhe.jpeg"
 
     # return redirect(url_for('.dhe_web'))
