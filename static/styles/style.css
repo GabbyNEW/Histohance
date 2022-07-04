@@ -147,5 +147,11 @@ div.methodOption {
 }
 
 div.methodOption.active {
+   transition: 200ms ease-in-out all;
    outline: 3px solid var(--medium-purple);
+}
+
+div.methodOption.inactive {
+   transition: 200ms ease-in-out all;
+   outline: 1px solid var(--translucent-gray);
 }
