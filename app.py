@@ -81,6 +81,11 @@ def send_image_file(filename=''):
     from flask import send_from_directory
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
+@app.route('/downloads/<filename>')
+def download_image_file(filename=''):
+    from flask import send_from_directory
+    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
+
 def perform_he(input_image):
     # stores the np.array of the output image
     result = he("uploads/"+input_image)
