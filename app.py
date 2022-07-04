@@ -18,9 +18,9 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = 'super secret key'
 
 # Ask if the server user wants to use TEMPLATES_AUTO_RELOAD
-autoReloadEnabled = True if str(input("Do you want templates to automatically reload when they are changed? (Y/N): ")).lower() == 'y' else False
-app.config['TEMPLATES_AUTO_RELOAD'] = autoReloadEnabled
-print("Running with auto reload " + "enabled" if str(autoReloadEnabled) else "disabled")
+# autoReloadEnabled = True if str(input("Do you want templates to automatically reload when they are changed? (Y/N): ")).lower() == 'y' else False
+# app.config['TEMPLATES_AUTO_RELOAD'] = autoReloadEnabled
+# print("Running with auto reload " + "enabled" if str(autoReloadEnabled) else "disabled")
 
 # Routing
 @app.route("/", methods = ['POST', 'GET', 'PUT'])
