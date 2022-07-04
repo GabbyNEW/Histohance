@@ -83,19 +83,19 @@ img#logo {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0px 5px 0px var(--translucent-gray);
+  box-shadow: 0px 3px 0px var(--translucent-gray);
 }
 
 .button:hover {
    color: var(--white);
-   box-shadow: 0px 3px 0px var(--translucent-gray);
-   transform: translateY(2px);
+   transform: translateY(-3px);
+   box-shadow: 0px 5px 0px var(--translucent-gray);
 }
 
 .button:active {
    color: var(--white);
-   box-shadow: 0px 0px 5px var(--translucent-gray);
-   transform: translateY(5px);
+   transform: translateY(0px);
+   box-shadow: 0px 3px 0px var(--translucent-gray);
 }
 
 #selectMethodText {
