@@ -46,8 +46,11 @@ def goto_result():
     return render_template('index.html', input_image=input_image, output_image=output_image, anchor="#result")
 
 @app.route("/image_upload", methods= ['POST'])
-def dhe_upload(method):
+def dhe_upload():
     size = 480, 480
+    # TODO Change the key name
+    method = request.form['key']
+
     image = request.files["file"]
     im = Image.open(image)
     im.filename = "input.jpg"

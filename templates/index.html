@@ -90,10 +90,13 @@
             $("#submitButton").prop('disabled', true);
             $("#removeButton").prop('disabled', true);
             $("#message").show();
-            var formData = new FormData(this);
-            // jQuery.each(jQuery('#file')[0].files, function(i, file) {
-            //   data.append('file-'+i, file);
-            // });
+            // These two lines of code appends the image
+            var form = document.getElementById('upload_form');
+            var formData = new FormData(form);
+            // This line appends the selected method value
+            // TODO: Change the parameters to reflect the method value
+            formData.append('key', 'value!!');
+            
             $.ajax({
               url: '/image_upload',
               data: formData,
