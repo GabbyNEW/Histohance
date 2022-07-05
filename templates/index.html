@@ -14,7 +14,7 @@
         <div class="logo">
           <img id="logo"></img>
           <p>Enhance your images today!</p>
-          <a class="button getStarted" href="/upload">Get started</a>
+          <a class="button getStarted" href="#upload">Get started</a>
         </div>
       </div>
     </section>
@@ -78,10 +78,12 @@
             <h2>Output Image:</h2>
             <img src="{{ url_for('send_image_file', filename=output_image) }}" alt="Output Image">
           </div>
+
+          <div>
+            <a href="{{ url_for('download_image_file', filename=output_image) }}" class="button" id="downloadButton" download="dhe">Download Image</a>
+          </div>
+
           {% endif %}
-        </div>
-        <div>
-          <a href="{{ url_for('download_image_file', filename=output_image) }}" class="button" id="downloadButton" download="dhe">Download Image</a>
         </div>
 
         <script>

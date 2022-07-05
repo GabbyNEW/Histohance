@@ -17,7 +17,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.secret_key = 'super secret key'
 
-# NOTE: Using autoreload on Heroku causes the flask app to crash and not start
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 print("Running with auto reload " + "enabled" if str(app.config['TEMPLATES_AUTO_RELOAD']) else "disabled")
 
@@ -27,6 +26,7 @@ def index():
     if 'input_image' in session :
         input_image = session['input_image']
         output_image = session['output_image']
+        session.clear()
         return render_template('index.html', input_image=input_image, output_image=output_image, anchor="#result")
     else :
         input_image = None
@@ -47,14 +47,15 @@ def dhe_upload():
         print("Image resized to " + str(width) + "x" + str(height))
         im.save(os.path.join(app.config["UPLOAD_FOLDER"], im.filename))
         session['input_image'] = im.filename
+        print("Method is: " + str(method))
         # 1 for DHE, 2 for HE
-        if method == 1:
+        if method == '1':
             perform_dhe(input_image=im.filename)
             session['output_image'] = "output_dhe.jpeg"
         else:
             perform_he(input_image=im.filename)
             session['output_image'] = "output_he.jpeg"
-
+        
         # return redirect(url_for('.dhe_web'))
         return "Success"
         #return render_template('index.html', input_image=session['input_image'], output_image=session['output_image'], anchor="#result")
