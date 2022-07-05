@@ -17,30 +17,25 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.secret_key = 'super secret key'
 
-# NOTE: Adding this to Heroku causes the flask app to crash and not start
-# Ask if the server user wants to use TEMPLATES_AUTO_RELOAD
-autoReloadEnabled = True if str(input("Do you want templates to automatically reload when they are changed? (Y/N): ")).lower() == 'y' else False
-app.config['TEMPLATES_AUTO_RELOAD'] = autoReloadEnabled
-print("Running with auto reload " + "enabled" if str(autoReloadEnabled) else "disabled")
+# NOTE: Using autoreload on Heroku causes the flask app to crash and not start
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+print("Running with auto reload " + "enabled" if str(app.config['TEMPLATES_AUTO_RELOAD']) else "disabled")
 
 # Routing
 @app.route("/", methods = ['POST', 'GET', 'PUT'])
 def index():
     return render_template('index.html')
 
-@app.route("/he", methods = ['POST', 'GET', 'PUT'])
-def he_web():
-    if 'input_image' in session : 
-        input_image = session['input_image']
-        output_image = session['output_image']
-    else : 
-        input_image = None
-        output_image = None
-    session.clear()
-    return render_template('he.html', input_image=input_image, output_image=output_image)
+@app.route("/upload", methods = ['GET'])
+def goto_upload():
+    return redirect(url_for('index') + '#upload')
 
-@app.route("/dhe", methods = ['POST', 'GET', 'PUT'])
-def dhe_web():
+@app.route("/select", methods = ['GET'])
+def goto_select():
+    return redirect(url_for('index') + '#select')
+
+@app.route("/result", methods = ['GET'])
+def goto_result():
     if 'input_image' in session :
         input_image = session['input_image']
         output_image = session['output_image']
@@ -48,20 +43,10 @@ def dhe_web():
         input_image = None
         output_image = None
     session.clear()
-    return render_template('dhe.html', input_image=input_image, output_image=output_image)
+    return render_template('index.html', input_image=input_image, output_image=output_image, anchor="#result")
 
-@app.route("/he_upload", methods = ['POST'])
-def he_upload():
-    image = request.files["file"]
-    image.filename = "input.jpg"
-    image.save(os.path.join(app.config["UPLOAD_FOLDER"], image.filename))
-    perform_he(input_image=image.filename)
-    session['input_image'] = image.filename
-    session['output_image'] = "output_he.jpeg"
-    return redirect(url_for('.he_web'))
-
-@app.route("/dhe_upload", methods= ['POST'])
-def dhe_upload():
+@app.route("/image_upload", methods= ['POST'])
+def dhe_upload(method):
     size = 480, 480
     image = request.files["file"]
     im = Image.open(image)
@@ -70,9 +55,14 @@ def dhe_upload():
     width, height = im.size
     print("Image resized to " + str(width) + "x" + str(height))
     im.save(os.path.join(app.config["UPLOAD_FOLDER"], im.filename))
-    perform_dhe(input_image=im.filename)
     session['input_image'] = im.filename
-    session['output_image'] = "output_dhe.jpeg"
+    # 1 for DHE, 2 for HE
+    if method == 1:
+        perform_dhe(input_image=im.filename)
+        session['output_image'] = "output_dhe.jpeg"
+    else:
+        perform_he(input_image=image.filename)
+        session['output_image'] = "output_he.jpeg"
 
     # return redirect(url_for('.dhe_web'))
     return "Success"
