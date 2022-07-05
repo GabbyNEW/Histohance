@@ -6,17 +6,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../static/styles/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="../static/js/script.js"></script>
     <script src="../static/js/scripthistogram.js"></script>
   </head>
   <body>
-    <div class="container" id="welcome">
-      <div class="logo">
-        <img id="logo"></img>
-        <p>Enhance your images today!</p>
-        <a class="button getStarted" href="/upload">Get started</a>
+    <section id="welcome">
+      <div class="container" id="welcome">
+        <div class="logo">
+          <img id="logo"></img>
+          <p>Enhance your images today!</p>
+          <a class="button getStarted" href="/upload">Get started</a>
+        </div>
       </div>
-    </div>
+    </section>
     <section id="upload">
       <div class="container" id="upload">
       <form id="upload_form" onsubmit="return false;" method= "POST" enctype="multipart/form-data" class="hist_form">
@@ -28,14 +29,14 @@
         </div>
         <div class="file-upload-content">
           <img class="file-upload-image" src="#" alt="This is your image" />
+          <p class="image-title-holder"><span class="image-title"></span></p>
         </div>
-        <!--<p><span style="font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Uploaded:  </span><span class="image-title"></span></p>-->
         <div class="container" id="chooseMethod">
           <div>
             <p id="selectMethodText">Select a method below</p>
           </div>
           <div class="methodList">
-            <div class="methodOption inactive" id="methodHE">
+            <div class="methodOption active" id="methodHE">
               <h1>Histogram Equalization</h1>
               <ul>
                 <li>Image processing method to adjust the contrast of an image by modifying the histogram of the image.</li>
@@ -54,7 +55,7 @@
             </div>
           </div>
           <div class="image-title-wrap">
-            <a class="button remove-image" id="removeButton" onclick="removeUpload()">Reset</span></a>
+            <a class="button remove-image" id="removeButton" onclick="removeUpload()">Reset</a>
             <input class="button" id="submitButton" type="submit" value="Submit image"/>
           </div>
         </div>
@@ -64,41 +65,70 @@
     <section id="upload">
       <div class="container" id="results">
         <p hidden id="message">Please wait... this can take a while. Page will refresh upon completion.</p>
-    
-        {% if output_image %}
-        <div class="input_image">
-          <h2>Input Image:</h2>
-          <img src="{{ url_for('send_image_file', filename=input_image) }}" alt="Input Image">
+        <div style="display:flex;">
+          {% if output_image %}
+          <div class="input_image" style=" margin: 1em;">
+            <h2>Input Image:</h2>
+            <img src="{{ url_for('send_image_file', filename=input_image) }}" alt="Input Image">
+          </div>
+          {% endif %}
+      
+          {% if input_image %}
+          <div class="output_image" style=" margin: 1em;">
+            <h2>Output Image:</h2>
+            <img src="{{ url_for('send_image_file', filename=output_image) }}" alt="Output Image">
+          </div>
+          {% endif %}
         </div>
-        {% endif %}
-    
-        {% if input_image %}
-        <div class="output_image">
-          <h2>Output Image:</h2>
-          <img src="{{ url_for('send_image_file', filename=output_image) }}" alt="Output Image">
-        </div>
-    
         <div>
-          <a href="{{ url_for('download_image_file', filename=output_image) }}" download="dhe" class="btn">
-            Download
-          </a>
+          <a href="{{ url_for('download_image_file', filename=output_image) }}" class="button" id="downloadButton" download="dhe">Download Image</a>
         </div>
-        {% endif %}
 
         <script>
+          // 1 for DHE, 2 for HE
+          var methodCode = 2;
+
+          function setActive($object, isActive) {
+            if (isActive) {
+                $object.addClass('active');
+                $object.removeClass('inactive');
+            } else {
+                $object.addClass('inactive');
+                $object.removeClass('active');
+            }
+          }
+
+          function toggleMethodOptions($active, $inactive) {
+            if ($active.hasClass('active')) {
+                setActive($active, false);
+                setActive($inactive, false);
+            } else {
+                setActive($active, true);
+                setActive($inactive, false);
+            }
+          }
+
+          function getMethod() {
+            return methodCode;
+          }
+
+          $(function() {
+            $('#methodDHE').on('click', function(e) { toggleMethodOptions($('#methodDHE'), $('#methodHE')); methodCode = 1; })
+            $('#methodHE').on('click', function(e) { toggleMethodOptions($('#methodHE'), $('#methodDHE')); methodCode = 2; })
+          });
+
           $("#upload_form").submit(function (){
-            $("#submitButton").prop('disabled', true);
-            $("#removeButton").prop('disabled', true);
+            $("#submitButton").attr("disabled", 'disabled');
+            $("#removeButton").attr("disabled", 'disabled');
             $("#message").show();
             // These two lines of code appends the image
             var form = document.getElementById('upload_form');
             var formData = new FormData(form);
             // This line appends the selected method value
-            // TODO: Change the parameters to reflect the method value
-            formData.append('key', 'value!!');
+            formData.append('use_method', getMethod());
             
             $.ajax({
-              url: '/image_upload',
+              url: '/upload',
               data: formData,
               cache: false,
               contentType: false,

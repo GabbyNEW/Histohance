@@ -58,6 +58,10 @@ div.container {
    height: 90vh;
 }
 
+.container#results {
+   display: flex;
+}
+
 a.getStarted {
    display: inline-flex;
    align-items: center; 

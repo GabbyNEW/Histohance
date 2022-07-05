@@ -24,52 +24,40 @@ print("Running with auto reload " + "enabled" if str(app.config['TEMPLATES_AUTO_
 # Routing
 @app.route("/", methods = ['POST', 'GET', 'PUT'])
 def index():
-    return render_template('index.html')
-
-@app.route("/upload", methods = ['GET'])
-def goto_upload():
-    return redirect(url_for('index') + '#upload')
-
-@app.route("/select", methods = ['GET'])
-def goto_select():
-    return redirect(url_for('index') + '#select')
-
-@app.route("/result", methods = ['GET'])
-def goto_result():
     if 'input_image' in session :
         input_image = session['input_image']
         output_image = session['output_image']
+        return render_template('index.html', input_image=input_image, output_image=output_image, anchor="#result")
     else :
         input_image = None
         output_image = None
     session.clear()
-    return render_template('index.html', input_image=input_image, output_image=output_image, anchor="#result")
+    return render_template('index.html', input_image=input_image, output_image=output_image)
 
-@app.route("/image_upload", methods= ['POST'])
+@app.route("/upload", methods= ['POST', 'GET', 'PUT'])
 def dhe_upload():
-    size = 480, 480
-    # TODO Change the key name
-    method = request.form['key']
+    if request.method == 'POST':
+        size = 480, 480
+        method = request.form['use_method']
+        image = request.files["file"]
+        im = Image.open(image)
+        im.filename = "input.jpg"
+        im.thumbnail(size, Image.ANTIALIAS)
+        width, height = im.size
+        print("Image resized to " + str(width) + "x" + str(height))
+        im.save(os.path.join(app.config["UPLOAD_FOLDER"], im.filename))
+        session['input_image'] = im.filename
+        # 1 for DHE, 2 for HE
+        if method == 1:
+            perform_dhe(input_image=im.filename)
+            session['output_image'] = "output_dhe.jpeg"
+        else:
+            perform_he(input_image=im.filename)
+            session['output_image'] = "output_he.jpeg"
 
-    image = request.files["file"]
-    im = Image.open(image)
-    im.filename = "input.jpg"
-    im.thumbnail(size, Image.ANTIALIAS)
-    width, height = im.size
-    print("Image resized to " + str(width) + "x" + str(height))
-    im.save(os.path.join(app.config["UPLOAD_FOLDER"], im.filename))
-    session['input_image'] = im.filename
-    # 1 for DHE, 2 for HE
-    if method == 1:
-        perform_dhe(input_image=im.filename)
-        session['output_image'] = "output_dhe.jpeg"
-    else:
-        perform_he(input_image=image.filename)
-        session['output_image'] = "output_he.jpeg"
-
-    # return redirect(url_for('.dhe_web'))
-    return "Success"
-
+        # return redirect(url_for('.dhe_web'))
+        return "Success"
+        #return render_template('index.html', input_image=session['input_image'], output_image=session['output_image'], anchor="#result")
 @app.route('/uploads/<filename>')
 def send_image_file(filename=''):
     from flask import send_from_directory
