@@ -25,6 +25,13 @@
       <h2>Output Image:</h2>
       <img src="{{ url_for('send_image_file', filename=output_image) }}" alt="Output Image">
     </div>
+
+    <div>
+      <a href="{{ url_for('download_image_file', filename=output_image) }}" download="dhe">
+        <button>Download</button>
+      </a>
+    </div>
+    
     {% endif %}
     
   </body>

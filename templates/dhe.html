@@ -2,31 +2,50 @@
   <head>
     <title>Dynamic Histogram Equalization</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../static/js/scripthistogram.js"></script>
+    <link rel="stylesheet" href="../static/styles/stylehistogram.css">
   </head>
 
   <body>
 
-    <div>
-      <p>Upload image here...</p>
-      <form id="dhe_form" onsubmit="return false;" method= "POST" enctype="multipart/form-data">
-        <input id="file" type = "file" name = "file" />
-        <input type = "submit"/>
+    <div class="file-upload">
+      <img id="logo"></img>
+      <form id="dhe_form" onsubmit="return false;" method= "POST" enctype="multipart/form-data" class="hist_form">
+        <div class="image-upload-wrap">
+          <input id="file" class="file-upload-input" type = "file" name = "file" onchange="readURL(this);" accept="image/*" />
+          <div class="drag-text">
+            <h3>Upload your image here.</h3>
+          </div>
+        </div>
+        <div class="file-upload-content">
+          <img class="file-upload-image" src="#" alt="your image" />
+          <div class="image-title-wrap">
+            <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">Uploaded Image</span></button>
+          </div>
+        </div>
+        <input type = "submit" class="btn"/>
       </form>
     </div>
 
     <p hidden id="message">Please wait... this can take a while. Page will refresh upon completion.</p>
 
     {% if output_image %}
-    <div>
+    <div class="input_image">
       <h2>Input Image:</h2>
       <img src="{{ url_for('send_image_file', filename=input_image) }}" alt="Input Image">
     </div>
     {% endif %}
 
     {% if input_image %}
-    <div>
+    <div class="output_image">
       <h2>Output Image:</h2>
       <img src="{{ url_for('send_image_file', filename=output_image) }}" alt="Output Image">
+    </div>
+
+    <div>
+      <a href="{{ url_for('download_image_file', filename=output_image) }}" download="dhe" class="btn">
+        Download
+      </a>
     </div>
     {% endif %}
     
