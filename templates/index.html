@@ -62,11 +62,12 @@
       </form>
       </div>
     </section>
-    <section id="upload">
+    <section id="result" style="height: auto;">
       <div class="container" id="results">
         <p hidden id="message">Please wait... this can take a while. Page will refresh upon completion.</p>
-        <div style="display:flex;">
-          {% if output_image %}
+        <div style="display:flex;flex-direction: column;align-items: center;">
+          <div style="display: flex;">
+            {% if output_image %}
           <div class="input_image" style=" margin: 1em;">
             <h2>Input Image:</h2>
             <img src="{{ url_for('send_image_file', filename=input_image) }}" alt="Input Image">
@@ -78,74 +79,77 @@
             <h2>Output Image:</h2>
             <img src="{{ url_for('send_image_file', filename=output_image) }}" alt="Output Image">
           </div>
-
+          </div>
           <div>
             <a href="{{ url_for('download_image_file', filename=output_image) }}" class="button" id="downloadButton" download="dhe">Download Image</a>
           </div>
-
           {% endif %}
-        </div>
-
-        <script>
-          // 1 for DHE, 2 for HE
-          var methodCode = 2;
-
-          function setActive($object, isActive) {
-            if (isActive) {
-                $object.addClass('active');
-                $object.removeClass('inactive');
-            } else {
-                $object.addClass('inactive');
-                $object.removeClass('active');
-            }
-          }
-
-          function toggleMethodOptions($active, $inactive) {
-            if ($active.hasClass('active')) {
-                setActive($active, false);
-                setActive($inactive, false);
-            } else {
-                setActive($active, true);
-                setActive($inactive, false);
-            }
-          }
-
-          function getMethod() {
-            return methodCode;
-          }
-
-          $(function() {
-            $('#methodDHE').on('click', function(e) { toggleMethodOptions($('#methodDHE'), $('#methodHE')); methodCode = 1; })
-            $('#methodHE').on('click', function(e) { toggleMethodOptions($('#methodHE'), $('#methodDHE')); methodCode = 2; })
-          });
-
-          $("#upload_form").submit(function (){
-            $("#submitButton").attr("disabled", 'disabled');
-            $("#removeButton").attr("disabled", 'disabled');
-            $("#message").show();
-            // These two lines of code appends the image
-            var form = document.getElementById('upload_form');
-            var formData = new FormData(form);
-            // This line appends the selected method value
-            formData.append('use_method', getMethod());
-            
-            $.ajax({
-              url: '/upload',
-              data: formData,
-              cache: false,
-              contentType: false,
-              processData: false,
-              method: 'POST',
-              type: 'POST',
-              success:function(formData){
-                $("#message").text('Done! Redirecting now...');
-                location.reload();
-              }
-            })
-          })
-        </script>
+        </div>  
       </div>
     </section>
+    <section id="footer" style="display: flex;justify-content: center; margin: 2em; flex-direction: column; align-items: center;">
+      <p>Developed by Matthew Gan, Adrian Jerez, Gabby Marquez, and Raymund Medialdea</p>
+      <span style="margin-bottom: 0.5em;"><b style="margin-right: 0.4em;">GitHub repo:</b><a href="https://github.com/GabbyNEW/Histohance">github.com/GabbyNEW/Histohance</a></span>
+      <span style="margin-bottom: 0.5em;"><b style="margin-right: 0.4em;">Based on:</b><a href="https://www.researchgate.net/publication/283727396_Image_enhancement_by_Histogram_equalization">Dorothy et al. (2015)</a> and <a href="https://www.researchgate.net/publication/3183129_A_Dynamic_Histogram_Equalization_for_Image_Contrast_Enhancement">Abdullah-Al-Wadud et al. (2007)</a></span>
+    </section>
+    <script>
+      // 1 for DHE, 2 for HE
+      var methodCode = 2;
+
+      function setActive($object, isActive) {
+        if (isActive) {
+            $object.addClass('active');
+            $object.removeClass('inactive');
+        } else {
+            $object.addClass('inactive');
+            $object.removeClass('active');
+        }
+      }
+
+      function toggleMethodOptions($active, $inactive) {
+        if ($active.hasClass('active')) {
+            setActive($active, false);
+            setActive($inactive, false);
+        } else {
+            setActive($active, true);
+            setActive($inactive, false);
+        }
+      }
+
+      function getMethod() {
+        return methodCode;
+      }
+
+      $(function() {
+        $('#methodDHE').on('click', function(e) { toggleMethodOptions($('#methodDHE'), $('#methodHE')); methodCode = 1; })
+        $('#methodHE').on('click', function(e) { toggleMethodOptions($('#methodHE'), $('#methodDHE')); methodCode = 2; })
+      });
+
+      $("#upload_form").submit(function (){
+        $("#submitButton").attr("disabled", 'disabled');
+        $("#removeButton").attr("disabled", 'disabled');
+        $("#message").show();
+        // These two lines of code appends the image
+        var form = document.getElementById('upload_form');
+        var formData = new FormData(form);
+        // This line appends the selected method value
+        formData.append('use_method', getMethod());
+        
+        $.ajax({
+          url: '/upload',
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          method: 'POST',
+          type: 'POST',
+          success:function(formData){
+            $("#message").text('Done! Redirecting now...');
+            location.reload();
+          }
+        })
+      })
+    </script>
   </body>
 
 </html>

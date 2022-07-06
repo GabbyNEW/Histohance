@@ -41,13 +41,19 @@ def dhe_upload():
         method = request.form['use_method']
         image = request.files["file"]
         im = Image.open(image)
+        
+        # Ensures the image has no alpha channel and places a white background in case of transparent pixels
+        if im.mode != "RGB":    
+            back = Image.new(mode=im.mode, size=im.size, color=(255, 255, 255))
+            im = Image.alpha_composite(im1=back, im2=im).convert("RGB")
+
         im.filename = "input.jpg"
         im.thumbnail(size, Image.ANTIALIAS)
         width, height = im.size
         print("Image resized to " + str(width) + "x" + str(height))
         im.save(os.path.join(app.config["UPLOAD_FOLDER"], im.filename))
         session['input_image'] = im.filename
-        print("Method is: " + str(method))
+        print("Method is: " + ("DHE" if 1 else "HE"))
         # 1 for DHE, 2 for HE
         if method == '1':
             perform_dhe(input_image=im.filename)
